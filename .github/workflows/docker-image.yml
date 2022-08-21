@@ -23,16 +23,7 @@ jobs:
       - name: Set env
         run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
       - name: Test
-        run: echo $GITHUB_SHA_SHORT
-      - name: Get app version
-        run: |
-          echo "VERSION=$(npm run version --silent)" >> $GITHUB_ENV
-      - name: Tests1
-        run: echo "Tests- ${{ env.GITHUB_SHA_SHORT }}"
-      - name: Tests2
-        run: echo "$VERSION + $DOCKERHUB_PASSWORD"
-      - name: Tests3
-        run: echo "${{ env.VERSION }}"
+        run: echo "$GITHUB_SHA_SHORT = ${{ env.GITHUB_SHA_SHORT }}"
 
   build:
     runs-on: ubuntu-latest
@@ -41,19 +32,28 @@ jobs:
     env:
       IMAGE_NAME: k8s-demo
     steps:
-    - uses: actions/checkout@v2
-    - name: Login to Docker Hub
-      uses: docker/login-action@v1
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-    - name: Build and push
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: Dockerfile
-        push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Get app version
+        run: |
+          echo "VERSION=$(npm run version --silent)" >> $GITHUB_ENV
+
+      - uses: actions/checkout@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
 
 
 
