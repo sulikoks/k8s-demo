@@ -19,17 +19,18 @@ jobs:
       - name: Tests2
         run: echo "$DOCKERHUB_HOST + $DOCKERHUB_USERNAME + $DOCKERHUB_PASSWORD"
 
-#  build:
-#    runs-on: ubuntu-latest
-#    env:
-#      DOCKERHUB_HOST: ${{ secrets.DOCKERHUB_HOST }}
-#      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-#      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-#    steps:
-#    - uses: actions/checkout@v3
-#    - name: Login in Docker HUB
-#      run: echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin "$DOCKERHUB_HOST"
-#    - name: Build the Docker image
-#      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-#    - name: Push the Docker image
-#      run:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKERHUB_HOST: ${{ secrets.DOCKERHUB_HOST }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+      IMAGE_NAME: "sulikoks/k8s-demo:test"
+    steps:
+    - uses: actions/checkout@v3
+    - name: Login in Docker HUB
+      run: echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin "$DOCKERHUB_HOST"
+    - name: Build the Docker image
+      run: docker build -t "$IMAGE_NAME" .
+    - name: Push the Docker image
+      run: docker push "$IMAGE_NAME"
