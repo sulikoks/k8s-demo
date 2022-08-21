@@ -1,9 +1,11 @@
 name: Docker Image CI
-
 on:
   push:
     branches: [ "master" ]
-
+  workflow_call:
+    secrets:
+      DOCKERHUB_HOST:
+        required: true
 jobs:
 
   tests:
