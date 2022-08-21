@@ -8,12 +8,18 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    environment: DOCKERHUB_HOST
+    environment: prod
+    env:
+      DOCKERHUB: ${{ env.DOCKERHUB_HOST }}
+      DOCKERHUB_HOST2: $DOCKERHUB_HOST
+      TEST: TEST-ENV
     steps:
-      - name: Tests
-        run: echo "here must be tests"
-      - name: Tests
-        run: echo "${{ env.DOCKERHUB_HOST }}"
+      - name: Tests1
+        run: echo "here must be tests $DOCKERHUB_HOST2"
+      - name: Tests2
+        run: echo "$TEST + $DOCKERHUB_HOST"
+      - name: Tests3
+        run: echo "$DOCKERHUB"
 
 #  build:
 #    runs-on: ubuntu-latest
