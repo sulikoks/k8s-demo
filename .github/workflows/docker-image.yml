@@ -18,12 +18,16 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Cache dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+#      - name: Cache dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.npm
+#          key: npm-${{ hashFiles('package-lock.json') }}
+#          restore-keys: npm-
+      - name: Set env
+        run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
+      - name: Test
+        run: echo $GITHUB_SHA_SHORT
       - name: Get app version
         run: |
           VERSION=$(npm run version --silent)
