@@ -27,7 +27,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Login in Docker HUB
-      run: echo "${{ secrets.DOCKERHUB_HOST }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin "${{ secrets.DOCKERHUB_PASSWORD }}"
+      run: echo "${{ env.DOCKERHUB_HOST }}" | docker login --username "${{ env.DOCKERHUB_USERNAME }}" --password-stdin "${{ env.DOCKERHUB_PASSWORD }}"
     - name: Build the Docker image
       run: docker build -t "$IMAGE_NAME" .
     - name: Push the Docker image
