@@ -26,9 +26,9 @@ jobs:
         run: echo $GITHUB_SHA_SHORT
       - name: Get app version
         run: |
-          VERSION=$(npm run version --silent)
+          echo "VERSION=$(npm run version --silent)" >> $GITHUB_ENV
       - name: Tests1
-        run: echo "Tests- ${{ secrets.GITHUB_SHA_SHORT }}"
+        run: echo "Tests- ${{ env.GITHUB_SHA_SHORT }}"
       - name: Tests2
         run: echo "$VERSION + $DOCKERHUB_PASSWORD"
       - name: Tests3
