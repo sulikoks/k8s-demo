@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
     env:
-      DOCKERHUB: ${{ env.DOCKERHUB_HOST }}
+      DOCKERHUB: 123
       DOCKERHUB_HOST2: $DOCKERHUB_HOST
       TEST: TEST-ENV
     steps:
