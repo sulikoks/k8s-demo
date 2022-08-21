@@ -15,7 +15,7 @@ jobs:
       - name: Tests1
         run: echo "Tests- ${{ secrets.DOCKERHUB_HOST }}"
       - name: Tests2
-        run: echo "${{ env.ACT }}"
+        run: echo "${{ secrets.ACTdasd }}"
       - name: Tests3
         run: echo "${{ env.GITHUB_PATH }}"
 
