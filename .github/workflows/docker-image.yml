@@ -11,7 +11,6 @@ jobs:
     environment: prod
     env:
       DOCKERHUB: 123
-      DOCKERHUB2: ${{ env.GITHUB_JOB }}
     steps:
       - name: Tests1
         run: echo "here must be tests ${{ env.GITHUB_JOB }}"
