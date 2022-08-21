@@ -3,7 +3,7 @@ set -o allexport
 source .env
 set +o allexport
 
-#echo "${DOCKERHUB_PASSWORD}" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin "$DOCKERHUB_HOST"
+echo "$DOCKERHUB_PASSWORD" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin "$DOCKERHUB_HOST"
 
 VERSION=$(npm run version --silent)
 IMAGE=sulikoks/k8s-demo
