@@ -13,7 +13,7 @@ jobs:
       - name: Tests
         run: echo "here must be tests"
       - name: Tests
-        run: echo ${{ env.DOCKERHUB_HOST }}
+        run: echo "${{ env.DOCKERHUB_HOST }}"
 
 #  build:
 #    runs-on: ubuntu-latest
