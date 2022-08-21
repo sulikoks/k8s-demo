@@ -8,7 +8,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    environment: 'DOCKERHUB_HOST'
+    environment: DOCKERHUB_HOST
     steps:
       - name: Tests
         run: echo "here must be tests"
