@@ -34,9 +34,7 @@ jobs:
         file: ./Dockerfile
         builder: ${{ steps.buildx.outputs.name }}
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/k8s-demo:latest
-        cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/k8s-demo:buildcache
-        cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/k8s-demo:buildcache,mode=max
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/k8s-demo:v$(npm run version --silent)
 #  build:
 #    runs-on: ubuntu-latest
 #    needs: tests
