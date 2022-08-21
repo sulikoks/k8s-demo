@@ -2,10 +2,7 @@ name: Docker Image CI
 on:
   push:
     branches: [ "master" ]
-#  workflow_call:
-#    secrets:
-#      DOCKERHUB_HOST:
-#        required: true
+
 jobs:
 
   tests:
@@ -26,11 +23,14 @@ jobs:
     needs: tests
     environment: prod
     env:
+      DOCKERHUB_HOST: ${{ secrets.DOCKERHUB_HOST }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
       IMAGE_NAME: "sulikoks/k8s-demo:test"
     steps:
     - uses: actions/checkout@v3
     - name: Login in Docker HUB
-      run: echo "${{ secrets.DOCKERHUB_HOST }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin "${{ secrets.DOCKERHUB_PASSWORD }}"
+      run: echo "$DOCKERHUB_HOST" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin "$DOCKERHUB_PASSWORD"
     - name: Build the Docker image
       run: docker build -t "$IMAGE_NAME" .
     - name: Push the Docker image
