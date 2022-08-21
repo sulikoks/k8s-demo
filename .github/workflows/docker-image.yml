@@ -8,10 +8,6 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     environment: prod
-    env:
-      DOCKERHUB_HOST: ${{ secrets.DOCKERHUB_HOST }}
-      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js
@@ -32,7 +28,7 @@ jobs:
         run: |
           VERSION=$(npm run version --silent)
       - name: Tests1
-        run: echo "Tests- ${{ secrets.DOCKERHUB_HOST }}"
+        run: echo "Tests- ${{ secrets.GITHUB_SHA_SHORT }}"
       - name: Tests2
         run: echo "$VERSION + $DOCKERHUB_PASSWORD"
       - name: Tests3
