@@ -11,13 +11,11 @@ jobs:
     environment: prod
     env:
       DOCKERHUB: 123
-      DOCKERHUB_HOST2: $DOCKERHUB_HOST
-      TEST: TEST-ENV
     steps:
       - name: Tests1
-        run: echo "here must be tests $DOCKERHUB_HOST2"
-      - name: Tests2
-        run: echo "$TEST + $DOCKERHUB_HOST"
+        run: echo "here must be tests $GITHUB_JOB"
+#      - name: Tests2
+#        run: echo "$TEST + $DOCKERHUB_HOST"
       - name: Tests3
         run: echo "$DOCKERHUB"
 
