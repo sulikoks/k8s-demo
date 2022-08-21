@@ -14,7 +14,7 @@ jobs:
       DOCKERHUB2: ${{ env.GITHUB_JOB }}
     steps:
       - name: Tests1
-        run: echo "here must be tests $DOCKERHUB2"
+        run: echo "here must be tests ${{ env.GITHUB_JOB }}"
 #      - name: Tests2
 #        run: echo "$TEST + $DOCKERHUB_HOST"
       - name: Tests3
