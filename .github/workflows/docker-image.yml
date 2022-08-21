@@ -13,11 +13,11 @@ jobs:
       DOCKERHUB: 123
     steps:
       - name: Tests1
-        run: echo "here must be tests ${{ !env.ACT }}"
-#      - name: Tests2
-#        run: echo "$TEST + $DOCKERHUB_HOST"
+        run: echo "Tests- ${{ env.DOCKERHUB_HOST }}"
+      - name: Tests2
+        run: echo "${{ env.ACT }}"
       - name: Tests3
-        run: echo "$DOCKERHUB"
+        run: echo "${{ env.GITHUB_PATH }}"
 
 #  build:
 #    runs-on: ubuntu-latest
