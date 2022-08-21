@@ -13,7 +13,7 @@ jobs:
       DOCKERHUB: 123
     steps:
       - name: Tests1
-        run: echo "Tests- ${{ env.DOCKERHUB_HOST }}"
+        run: echo "Tests- ${{ secrets.DOCKERHUB_HOST }}"
       - name: Tests2
         run: echo "${{ env.ACT }}"
       - name: Tests3
