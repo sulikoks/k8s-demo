@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
   <div>Total requests: ${requests++}</div>
   <div>IP: ${IP}</div>
   <div>HOSTNAME: ${HOSTNAME}</div>
-  <div>Version 1.0.9</div>
+  <div>Version 1.0.10</div>
 </div>
   `);
 });
