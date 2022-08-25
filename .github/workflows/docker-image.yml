@@ -23,18 +23,12 @@ jobs:
     steps:
       - name: Checkout Application
         uses: actions/checkout@v3
-        with:
-          path: ./app
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
       - name: Get app version
         run: |
-          cd ./app
-          echo "$PWD"
-          echo "-----------------------"
-          ls -a
           echo "IMAGE_NAME=$(npm run name --silent)" >> $GITHUB_ENV
           echo "VERSION=v$(npm run version --silent)" >> $GITHUB_ENV
 
@@ -46,12 +40,35 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: ./app
-          file: ./app/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+    outputs:
+      IMAGE_NAME: ${{ env.IMAGE_NAME }}
+      VERSION: ${{ env.VERSION }}
+
+  git:
+    name: Update Git Repo
+    needs: [tests, build]
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - name: Get app version
+        run: |
+          echo "IMAGE_NAME=${{ needs.build.outputs.IMAGE_NAME }}" >> $GITHUB_ENV
+          echo "VERSION=${{ needs.build.outputs.VERSION }}" >> $GITHUB_ENV
+
+      - name: Read Test ENV
+        run: |
+          echo "$PWD"
+          echo "-----------------------"
+          echo "${{ env.IMAGE_NAME }}"
+          echo "${{ env.VERSION }}"
+          echo "-----------------------"
+          ls -a
 
       - name: Checkout Application Config
         uses: actions/checkout@v3
@@ -59,6 +76,7 @@ jobs:
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}-config
           ssh-key: ${{ secrets.SSH_KEY }}
           path: ./app-config
+
       - name: Read deployment file
         run: |
           cd ./app-config
@@ -68,26 +86,3 @@ jobs:
           git add .
           git commit -m 'Done by GitHub Actions: ${{ env.VERSION }}'
           git push
-    outputs:
-      IMAGE_NAME: ${{ env.IMAGE_NAME }}
-      VERSION: ${{ env.VERSION }}
-
-  git:
-    name: Update Git Repo
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-#      - name: Checkout Application Config
-#        uses: actions/checkout@v3
-#        with:
-#          repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}-config
-#          ssh-key: ${{ secrets.SSH_KEY }}
-#          path: ./app-config
-      - name: Read Test ENV
-        run: |
-          echo "$PWD"
-          echo "${{ needs.build.outputs }}"
-          echo "${{ needs.build.outputs.VERSION }}"
-          echo "${{ needs.build.outputs.IMAGE_NAME }}"
-          echo "-----------------------"
-          ls -a
