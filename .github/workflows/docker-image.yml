@@ -25,6 +25,7 @@ jobs:
           path: ./app
       - name: Go to app directory
         run: |
+          echo "$PWD"
           cd ./app
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -32,6 +33,7 @@ jobs:
           node-version: '14'
       - name: Get app version
         run: |
+          echo "$PWD"
           echo "IMAGE_NAME=$(npm run name --silent)" >> $GITHUB_ENV
           echo "VERSION=v$(npm run version --silent)" >> $GITHUB_ENV
 

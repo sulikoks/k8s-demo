@@ -6,9 +6,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node index.js",
+    "build-image": "sh build-image.sh",
     "name": "echo $npm_package_name",
-    "version": "echo $npm_package_version",
-    "build-image": "sh build-image.sh"
+    "version": "echo $npm_package_version"
   },
   "dependencies": {
     "express": "^4.16.1"
