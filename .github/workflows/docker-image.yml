@@ -19,7 +19,13 @@ jobs:
     needs: tests
     environment: prod
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Application
+        uses: actions/checkout@v3
+        with:
+          path: ./app
+      - name: Go to app directory
+        run: |
+          cd ./app
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -43,3 +49,14 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Checkout Application Config
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}-config
+          ssh-key: ${{ secrets.SSH_KEY }}
+          path: ../app-config
+      - name: Read deployment file
+        run: |
+          cd ../app-config
+          cat ./prod/deployment.yml
