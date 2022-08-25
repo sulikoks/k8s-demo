@@ -60,6 +60,11 @@ jobs:
       - name: Read deployment file
         run: |
           cd ./app-config
+          git config user.email github-action@gmail.com
+          git config user.name github-action
           echo "$PWD"
           echo "-----------------------"
           ls -a
+          cat ./prod/deployment.yml
+          sed -i 's+sulikoks/k8s-demo.*+sulikoks/k8s-demo:${{ env.VERSION }}+g' ./prod/deployment.yml
+          cat ./prod/deployment.yml
