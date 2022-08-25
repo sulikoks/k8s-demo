@@ -6,6 +6,7 @@ on:
 jobs:
 
   tests:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,6 +16,7 @@ jobs:
         run: echo "$GITHUB_SHA_SHORT = ${{ env.GITHUB_SHA_SHORT }}"
 
   build:
+    name: Build and Push
     runs-on: ubuntu-latest
     needs: tests
     environment: prod
@@ -62,12 +64,27 @@ jobs:
           cd ./app-config
           git config user.email github-action@gmail.com
           git config user.name github-action
-          echo "$PWD"
-          echo "-----------------------"
-          ls -a
-          cat ./prod/deployment.yml
-          sed -i 's+sulikoks/k8s-demo.*+sulikoks/k8s-demo:${{ env.VERSION }}+g' ./prod/deployment.yml
-          cat ./prod/deployment.yml
+          sed -i 's+${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}.*+${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}+g' ./prod/deployment.yml
           git add .
           git commit -m 'Done by GitHub Actions: ${{ env.VERSION }}'
           git push
+
+  git:
+    name: Update Git Repo
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+#      - name: Checkout Application Config
+#        uses: actions/checkout@v3
+#        with:
+#          repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}-config
+#          ssh-key: ${{ secrets.SSH_KEY }}
+#          path: ./app-config
+      - name: Read Test ENV
+        run: |
+          cd ./app-config
+          echo "$PWD"
+          echo "${{ env.IMAGE_NAME }}"
+          echo "${{ env.VERSION }}"
+          echo "-----------------------"
+          ls -a
