@@ -68,3 +68,6 @@ jobs:
           cat ./prod/deployment.yml
           sed -i 's+sulikoks/k8s-demo.*+sulikoks/k8s-demo:${{ env.VERSION }}+g' ./prod/deployment.yml
           cat ./prod/deployment.yml
+          git add .
+          git commit -m 'Done by GitHub Actions: ${{ env.VERSION }}'
+          git push
