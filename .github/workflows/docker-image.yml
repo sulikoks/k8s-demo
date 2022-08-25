@@ -86,8 +86,8 @@ jobs:
       - name: Read Test ENV
         run: |
           echo "$PWD"
-          echo "${{ steps.build.outputs }}"
-          echo "${{ steps.build.outputs.VERSION }}"
-          echo "${{ steps.build.outputs.IMAGE_NAME }}"
+          echo "${{ needs.build.outputs }}"
+          echo "${{ needs.build.outputs.VERSION }}"
+          echo "${{ needs.build.outputs.IMAGE_NAME }}"
           echo "-----------------------"
           ls -a
