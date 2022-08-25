@@ -9,11 +9,22 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set env
-        run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" >> $GITHUB_ENV
-      - name: Test
-        run: echo "$GITHUB_SHA_SHORT = ${{ env.GITHUB_SHA_SHORT }}"
+      - name: Checkout Application
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Get app version
+        run: |
+          echo "IMAGE_NAME=$(npm run name --silent)" >> $GITHUB_ENV
+          echo "VERSION=v$(npm run version --silent)" >> $GITHUB_ENV
+    outputs:
+      IMAGE_NAME: ${{ env.IMAGE_NAME }}
+      VERSION: ${{ env.VERSION }}
+
 
   build:
     name: Build and Push
@@ -21,16 +32,13 @@ jobs:
     needs: tests
     environment: prod
     steps:
+      - name: Get Env
+        run: |
+          echo "IMAGE_NAME=${{ needs.tests.outputs.IMAGE_NAME }}" >> $GITHUB_ENV
+          echo "VERSION=${{ needs.tests.outputs.VERSION }}" >> $GITHUB_ENV
+
       - name: Checkout Application
         uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
-      - name: Get app version
-        run: |
-          echo "IMAGE_NAME=$(npm run name --silent)" >> $GITHUB_ENV
-          echo "VERSION=v$(npm run version --silent)" >> $GITHUB_ENV
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -46,9 +54,6 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
             ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:latest
-    outputs:
-      IMAGE_NAME: ${{ env.IMAGE_NAME }}
-      VERSION: ${{ env.VERSION }}
 
   git:
     name: Update Git Repo
@@ -56,30 +61,19 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
     steps:
-      - name: Get app version
+      - name: Get Env
         run: |
-          echo "IMAGE_NAME=${{ needs.build.outputs.IMAGE_NAME }}" >> $GITHUB_ENV
-          echo "VERSION=${{ needs.build.outputs.VERSION }}" >> $GITHUB_ENV
-
-      - name: Read Test ENV
-        run: |
-          echo "$PWD"
-          echo "-----------------------"
-          echo "${{ env.IMAGE_NAME }}"
-          echo "${{ env.VERSION }}"
-          echo "-----------------------"
-          ls -a
+          echo "IMAGE_NAME=${{ needs.tests.outputs.IMAGE_NAME }}" >> $GITHUB_ENV
+          echo "VERSION=${{ needs.tests.outputs.VERSION }}" >> $GITHUB_ENV
 
       - name: Checkout Application Config
         uses: actions/checkout@v3
         with:
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}-config
           ssh-key: ${{ secrets.SSH_KEY }}
-          path: ./app-config
 
       - name: Read deployment file
         run: |
-          cd ./app-config
           git config user.email github-action@gmail.com
           git config user.name github-action
           sed -i 's+${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}.*+${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}+g' ./prod/deployment.yml
