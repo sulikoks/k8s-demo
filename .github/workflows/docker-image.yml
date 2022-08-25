@@ -44,7 +44,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ./app
           file: Dockerfile
           push: true
           tags: |
@@ -56,8 +56,10 @@ jobs:
         with:
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.IMAGE_NAME }}-config
           ssh-key: ${{ secrets.SSH_KEY }}
-          path: ../app-config
+          path: ./app-config
       - name: Read deployment file
         run: |
-          cd ../app-config
-          cat ./prod/deployment.yml
+          cd ./app-config
+          echo "$PWD"
+          echo "-----------------------"
+          ls -a
