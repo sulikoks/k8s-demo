@@ -68,6 +68,9 @@ jobs:
           git add .
           git commit -m 'Done by GitHub Actions: ${{ env.VERSION }}'
           git push
+    outputs:
+      IMAGE_NAME: ${{ env.IMAGE_NAME }}
+      VERSION: ${{ env.VERSION }}
 
   git:
     name: Update Git Repo
@@ -82,9 +85,9 @@ jobs:
 #          path: ./app-config
       - name: Read Test ENV
         run: |
-          cd ./app-config
           echo "$PWD"
-          echo "${{ env.IMAGE_NAME }}"
-          echo "${{ env.VERSION }}"
+          echo "${{ steps.build.outputs }}"
+          echo "${{ steps.build.outputs.VERSION }}"
+          echo "${{ steps.build.outputs.IMAGE_NAME }}"
           echo "-----------------------"
           ls -a
