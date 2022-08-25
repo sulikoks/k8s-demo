@@ -28,6 +28,7 @@ jobs:
           echo "$PWD"
           ls -a
           cd ./app
+          echo "$PWD"
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
