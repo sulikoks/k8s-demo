@@ -1,5 +1,6 @@
 'use strict';
 const express = require('express');
+const packageJson = require('package.json');
 
 const app = express();
 
@@ -30,7 +31,7 @@ app.get('/', (req, res) => {
   <div>Total requests: ${requests++}</div>
   <div>IP: ${IP}</div>
   <div>HOSTNAME: ${HOSTNAME}</div>
-  <div>Version 1.0.18</div>
+  <div>Version ${packageJson.version}</div>
 </div>
   `);
 });
