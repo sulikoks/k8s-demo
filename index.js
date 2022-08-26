@@ -4,7 +4,7 @@ const packageJson = require('./package.json');
 
 const app = express();
 
-const IP = process.env.KUBERNETES_SERVICE_HOST;
+const IP = process.env.POD_IP;
 const HOSTNAME = process.env.HOSTNAME;
 const startTime = new Date().toISOString();
 let requests = 0;
@@ -32,8 +32,8 @@ app.get('/', (req, res) => {
   <div>IP: ${IP}</div>
   <div>HOSTNAME: ${HOSTNAME}</div>
   <div>Version ${packageJson.version}</div>
-  <div>ENVTEST ${process.env.DEMO_GREETING}</div>
-  <div>ENV ${JSON.stringify(process.env)}</div>
+  <div>DEMO_GREETING: ${process.env.DEMO_GREETING}</div>
+  <div>DEMO_FAREWELL: ${process.env.DEMO_FAREWELL}</div>
 </div>
   `);
 });
