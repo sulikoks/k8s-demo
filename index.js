@@ -1,6 +1,6 @@
 'use strict';
 const express = require('express');
-const packageJson = require('package.json');
+const packageJson = require('./package.json');
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.get('/hello', (req, res) => {
 app.get('/', (req, res) => {
   res.send(`
 <div>
-  <h2>Aaaaeee new Deploiment by Suliko</h2>
+  <h2>Aaaaeee new Deployment by Suliko</h2>
 
   <div>Started: ${startTime}</div>
   <div>Total requests: ${requests++}</div>

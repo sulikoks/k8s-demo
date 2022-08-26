@@ -1,6 +1,6 @@
 {
   "name": "k8s-demo",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "Node.js on Docker",
   "author": "First Last <first.last@example.com>",
   "main": "server.js",
