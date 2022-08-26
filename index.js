@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
   <div>HOSTNAME: ${HOSTNAME}</div>
   <div>Version ${packageJson.version}</div>
   <div>ENVTEST ${process.env.DEMO_GREETING}</div>
-  <div>ENV ${process.env}</div>
+  <div>ENV ${JSON.stringify(process.env)}</div>
 </div>
   `);
 });
